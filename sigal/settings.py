@@ -55,6 +55,7 @@ _DEFAULT_CONFIG = {
     'orig_link': False,
     'plugins': [],
     'plugin_paths': [],
+    'show_map': False,
     'source': '',
     'theme': 'colorbox',
     'thumb_dir': 'thumbnails',
