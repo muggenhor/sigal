@@ -129,20 +129,24 @@ def generate_thumbnail(source, outname, box, delay, fit=True, options=None):
     logger = logging.getLogger(__name__)
     tmpfile = outname + ".tmp.jpg"
 
-    # dump an image of the video
-    cmd = ['ffmpeg', '-i', source, '-an', '-r', '1',
-           '-ss', delay, '-vframes', '1', '-y', tmpfile]
-    logger.debug('Create thumbnail for video: %s', ' '.join(cmd))
+    thumb_source = splitext(source)[0] + '.thm'
+    if os.path.exists(thumb_source):
+        image.generate_thumbnail(thumb_source, outname, box, fit, options)
+    else:
+        # dump an image of the video
+        cmd = ['ffmpeg', '-i', source, '-an', '-r', '1',
+               '-ss', delay, '-vframes', '1', '-y', tmpfile]
+        logger.debug('Create thumbnail for video: %s', ' '.join(cmd))
 
-    try:
-        check_subprocess(cmd, source, outname)
-    except Exception:
-        return
+        try:
+            check_subprocess(cmd, source, outname)
+        except Exception:
+            return
 
-    # use the generate_thumbnail function from sigal.image
-    image.generate_thumbnail(tmpfile, outname, box, fit, options)
-    # remove the image
-    os.unlink(tmpfile)
+        # use the generate_thumbnail function from sigal.image
+        image.generate_thumbnail(tmpfile, outname, box, fit, options)
+        # remove the image
+        os.unlink(tmpfile)
 
 
 def process_video(filepath, outpath, settings):
